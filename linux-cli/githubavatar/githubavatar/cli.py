@@ -2,7 +2,7 @@ import click
 
 @click.command()
 @click.option('--as-cowboy', '-c', is_flag=True, help='Greet as a cowboy.')
-@click.argument('name', default='wichit2s', required=False, help='login name for github')
+@click.argument('name', default='wichit2s', required=False)
 def main(name, as_cowboy):
     """Get Github Avatar"""
     #greet = 'Howdy' if as_cowboy else 'Hello'
@@ -12,7 +12,7 @@ def main(name, as_cowboy):
     j = requests.get(api_user_url).json()
     
     img_data = requests.get(j['avatar_url']).content
-    avatarfilename = '{}-avatar.png'.format(name)
+    avatarfilename = '{}-avatar.jpg'.format(name)
     with open(avatarfilename, 'wb') as fp:
         fp.write(img_data)
     import subprocess
