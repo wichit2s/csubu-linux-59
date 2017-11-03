@@ -1,2 +1,3 @@
 # csubu-linux-59
-Awesome project for csubu 59
+CS UBU Course Repository for Linux Laborator
+สาขาวิทยาการคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยอุบลราชธานี
