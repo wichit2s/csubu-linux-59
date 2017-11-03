@@ -37,8 +37,8 @@ cd githubavatar
 ```
 - เตรียม virtualenv สำหรับพัฒนาโปรแกรม
 ```sh
-virtualenv env
-source env/bin/activate
+virtualenv .env
+source .env/bin/activate
 ```
 
 
