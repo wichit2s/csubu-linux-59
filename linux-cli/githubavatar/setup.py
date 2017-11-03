@@ -3,7 +3,7 @@ Get Github Avatar
 """
 from setuptools import find_packages, setup
 
-dependencies = ['Click']
+dependencies = ['Click', 'Pillow', 'requests']
 
 setup(
     name='githubavatar',
