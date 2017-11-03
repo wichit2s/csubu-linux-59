@@ -1,9 +1,8 @@
 # วิธีการเขียน CLI ด้วย Python
 ## 1. ติดตั้ง
 ```sh
-sudo apt install curl
-curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python
-pipsi install cookiecutter
+pip install --user cookiecutter
+pip install --user virtualenv
 ```
 
 ## 2. สร้างโปรแกรมใหม่จาก template บน github
