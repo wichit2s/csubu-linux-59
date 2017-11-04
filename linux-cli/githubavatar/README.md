@@ -1,21 +1,22 @@
 # githubavatar
-
-
 Get Github Avatar
+โปรแกรมสำหรับแสดงรูป avatar บน github ของผู้ใช้
 
-# Start virtual environment
+## วิธีใช้งาน
+- ติดตั้ง package ที่จำเป็นสำหรับโปรแกรม
+
 ```sh
-source env/bin/activate
+pip install --user requests Pillow
 ```
 
-# Installation
+## ติดตั้งโปรแกรม githubavatar 
+```sh
+pip install --user .
+```
 
-    $ pip install .
-
-
-# Usage
-
-To use it:
-
-    $ githubavatar [wichit2s]
+## วิธีการใช้งาน
+```sh
+githubavatar wichit2s
+githubavatar joinshena
+```
 

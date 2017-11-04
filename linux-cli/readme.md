@@ -30,20 +30,16 @@ year (default is "2014")? 2017
 version (default is "0.1.0")?
 ```
 
-## 3. เริ่มเขียนโปรแกรม
+## 3. เริ่มเขียนโปรแกรม 
+(remove virtualenv)
+
 ```sh
 cd githubavatar
 ```
-- เตรียม virtualenv สำหรับพัฒนาโปรแกรม
-```sh
-virtualenv .env
-source .env/bin/activate
-```
 
-
-- ติดตั้ง package 'requests' สำหรับต่อเว็บ
+- ติดตั้ง package ที่จำเป็น
 ```sh
-pip install click requests Pillow
+pip install --user click requests Pillow
 ```
 
 - เปิดไฟล์ เพื่อทำการแก้ไขคำสั่ง
@@ -76,7 +72,7 @@ def main(name, as_author):
 - บันทึกแล้วปิด
 - ติดตั้ง
 ```sh
-pip install --editable .
+pip install --user .
 ```
 - ทดสอบ
 ```sh
