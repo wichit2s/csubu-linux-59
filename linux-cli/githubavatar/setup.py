@@ -7,7 +7,7 @@ dependencies = ['Click', 'Pillow', 'requests']
 
 setup(
     name='githubavatar',
-    version='0.1.0',
+    version='0.2.0',
     url='https://github.com/wichit2s/githubavatar',
     license='BSD',
     author='CS UBU',
@@ -40,8 +40,8 @@ setup(
         'Operating System :: MacOS',
         'Operating System :: Unix',
         'Operating System :: Microsoft :: Windows',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
+        #'Programming Language :: Python',
+        #'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ]
