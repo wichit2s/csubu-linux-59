@@ -79,3 +79,11 @@ pip install --user .
 githubavatar wichit2s
 githubavatar joinshena
 ```
+
+# Links
+## IMDB API
+* http://www.omdbapi.com/ $\to$ https://pypi.python.org/pypi/omdb
+* https://imdbpy.sourceforge.io/ 
+* https://github.com/msaqib4203/IMDB-API
+* https://www.themoviedb.org/
+
