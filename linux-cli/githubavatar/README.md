@@ -1,22 +1,17 @@
-# githubavatar
-Get Github Avatar
-โปรแกรมสำหรับแสดงรูป avatar บน github ของผู้ใช้
+# linux-lab
 
-## วิธีใช้งาน
-- ติดตั้ง package ที่จำเป็นสำหรับโปรแกรม
+>ผู้พัฒนาโครงการ : Piyawat Junto
+>รหัสนักศึกษา: 59110440260
 
-```sh
-pip install --user requests Pillow
-```
+## จุดประสงค์
+>ฝึกใช้ Phython  ทำ CLI โปรแกรม ตามแบบ githubavatar
 
-## ติดตั้งโปรแกรม githubavatar 
-```sh
-pip install --user .
-```
+## สิ่งที่ต้องพัฒนาตัวเองให้ดีขึ้น
 
-## วิธีการใช้งาน
-```sh
-githubavatar wichit2s
-githubavatar joinshena
-```
+1. จะตั้งใจเรียน
+2. ไม่เอามือถือขึ้นมาเล่นอีกแล้ว
+3. จะตั้งใจอ่านสอบปลายภาคทุกวิชา
+4. จะใช้เงินอย่างประหยัด
+5. ทบทวนการเรียนทุกครั้งหลังเลิกคาบ
+6. เล่นเกมส์ให้น้อยลง
 
