@@ -1,5 +1,5 @@
 """
-My Tool does one thing, and one thing well.
+Search and show imdb movie poster.
 """
 from setuptools import find_packages, setup
 
@@ -7,7 +7,7 @@ dependencies = ['click']
 
 setup(
     name='getposter',
-    version='0.0.1',
+    version='0.2.0',
     url='https://github.com/wichit2s/getposter',
     license='BSD',
     author='Wichit Sombat',
