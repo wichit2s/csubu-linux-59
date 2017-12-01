@@ -1,83 +1,94 @@
+import sys
 import click
-
-from bs4 import BeautifulSoup
 import requests
 import json
+import re
 
 from PIL import Image
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except: # when using python3.x
+    from io import BytesIO, StringIO
 
+from bs4 import BeautifulSoup
 
+#IMDBSEARCHURL = 'http://www.imdb.com/search/title?title=The%20Godfather&page=1&ref_=adv_nxt'
 
-def getJSON(html):
-	data = {}
-	data['poster'] = html.find(attrs={'class':'poster'}).find('img')['src']
-	data['title'] =  html.find(itemprop='name').text.strip()
-	data['rating'] = html.find(itemprop='ratingValue').text
-	data['bestRating'] = html.find(itemprop='bestRating').text
-	data['votes'] = html.find(itemprop='ratingCount').text
-	data['rated'] = html.find(itemprop='contentRating')['content']
-	tags = html.findAll("span",{"itemprop":"genre"})
-	genres = []
-	for genre in tags:
-		genres.append(genre.text.strip())
-	data['genre'] = genres	
-		
-	data['description'] = html.find(itemprop="description").text.strip()
+IMDBSEARCHURL = 'http://www.imdb.com/search/title?title={}&page={}&ref_=adv_nxt'
 
-	tags = html.findAll(itemprop="actors")
-	actors = []
-	for actor in tags:
-		actors.append(actor.text.strip().replace(',',''))
-	data['cast'] = actors	
-		
+def extractmovieinfo(div):
+    data = {}
 
-	tags = html.findAll(itemprop="creator")
-	creators = []
-	for creator in tags:
-		creators.append(creator.text.strip().replace(',',''))
-	data['writers'] = creators	
-		
-	directors = []
-	tags = html.findAll(itemprop="director")
-	for director in tags:
-		directors.append(director.text.strip().replace(',',''))
-	data['directors'] = directors	
-		
-	json_data = json.dumps(data)
-	return json_data
-	
-def getHTML(url):
-	response = requests.get(url)
-	return BeautifulSoup(response.content,'html.parser')	
-	
-def getURL(input):
-	try:
-		if input[0] == 't' and input[1] == 't':
-			html = getHTML('http://petmaya.com'+input+'/')
-			
-		else:
-			html = getHTML('https://www.google.co.in/search?q='+input)
-			for cite in html.findAll('cite'):
-				if 'imdb.com/title/tt' in cite.text:
-					html = getHTML('http://'+cite.text)
-					break
-		return getJSON(html)	
-	except Exception as e:
-		return 'Invalid input or Network Error!'
-		
+    # id & title & runtime
+    img = div.find_next('img')
+    data['id'] = img['data-tconst']
+    data['title'] = img['alt']
+    try:
+        data['runtime'] = div.find_next('span', attrs={'class':'runtime'}).text
+    except: pass
 
+    # url & year
+    h3 = div.find_next('h3')
+    data['url'] = 'http://www.imdb.com{}'.format(h3.find_next('a')['href'])
+    year = h3.find_next('span', attrs={'class': ['lister-item-year',
+    'text-muted unbold']}).text
+    data['year'] = re.findall(r'\d+', year)[0]
 
+    # gross
+    try:
+        p = div.find_all('span')
+        data['gross'] = int(p[-1]['data-value'].replace(',',''))
+    except: pass
+
+    # rating
+    try:
+        rate = div.find_next('div', attrs={'class':['rating']}).find_all('meta')
+        data['rate'] = float(rate[0]['content'])
+        data['total'] = int(rate[1]['content'])
+        data['vote'] = int(rate[2]['content'])
+    except: pass
+
+    return data
+
+def searchmovies(title):
+    b = BeautifulSoup(requests.get(IMDBSEARCHURL.format(title, 1)).text, 'lxml')
+    return b.find_all('div', attrs={'class': ['lister-item', 'mode-advanced']})
+    
 @click.command()
-@click.option('--as-cowboy', '-c', is_flag=True, help='Greet as a cowboy.')
-@click.argument('name', default='world', required=False)
-def main(name, as_cowboy):
-    """My Tool does one thing, and one thing well."""
-    #greet = 'Howdy' if as_cowboy else 'Hello'
-    #click.echo('{0}, {1}.'.format(greet, name))
-    #r = getURL('Mr Incredible')
-    r = json.loads(getURL(name))
-    print(type(r))
-    req = requests.get(r['poster'])
-    img = Image.open(StringIO(req.content))
-    img.show()
+@click.option('--search', '-s', is_flag=True, help='search all result from text.')
+@click.argument('title', required=False)
+def main(title, search):
+    """Search and show movie poster from search."""
+    if title:
+        movies = [ extractmovieinfo(div) for div in searchmovies(title) ]
+        if search: 
+            click.echo('seaching for title = {}'.format(title))
+            print('{:10} {:30} {:^6} {:^5} {:>15}'.format(
+                    'id', 'title', 'year', 'rate', 'gross'))
+            for m in movies:
+                try:
+                    print('{:10} {:30} {:6} {:6} {:15}'.format(
+                        m['id'], m['title'][:30], m['year'], m['rate'], m['gross']))
+                except: pass
+        else:
+            movie = movies[0]
+            click.echo('showing poster "{}"'.format(movie['title']))
+            try:
+                print('{:10} {:30} {:^6} {:^5} {:>15}'.format(
+                    'id', 'title', 'year', 'rate', 'gross'))
+                print('{:10} {:30} {:6} {:6} {:15}'.format(
+                    movie['id'], movie['title'][:30], movie['year'], movie['rate'], movie['gross']))
+            except: pass
+            b = BeautifulSoup(requests.get(movie['url']).text, 'lxml')
+            poster = b.find_all('div', attrs={'class':'poster'})[0]
+            imgurl = poster.find_next('img')['src']
+            req = requests.get(imgurl)
+            if sys.version_info >= (3,0): 
+                img = Image.open(BytesIO(req.content)) 
+                img.show() 
+            else: 
+                img = Image.open(StringIO(req.content)) 
+                img.show()
+    else:
+        click.echo('usage: getposter "The Movie Title"')
+
